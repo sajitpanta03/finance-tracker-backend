@@ -16,6 +16,6 @@ trait SanctumToken
     public function GenerateToken(User $user):string
     {
 
-        return $user->createToken(time())->plainTextToken;
+        return $user->createToken('login')->plainTextToken;
     }
 }

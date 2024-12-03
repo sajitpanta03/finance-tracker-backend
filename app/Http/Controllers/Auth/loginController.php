@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequist;
 use App\Models\User;
 use App\Trait\SanctumToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class loginController extends Controller
 {
@@ -19,7 +20,12 @@ class loginController extends Controller
 
         $user =  $request->authenticate();
 
-        return $this->GenerateToken($user);
+        return [ "token" => $this->GenerateToken($user)];
 
+    }
+
+    public function logout(){
+        auth()->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }
