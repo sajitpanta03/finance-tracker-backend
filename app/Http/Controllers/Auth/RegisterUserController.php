@@ -27,17 +27,18 @@ class RegisterUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'remember' => $request->remember
             ]);
 
-            $token = $this->GenerateToken($user);
-            
+            $token = $this->GenerateToken($user, $request->remember);
+
 
             DB::commit();
-            
+
             return response()->json([
                 "token"=> $token
             ]);
-            
+
 
         } catch (Exception $e) {
             DB::rollback();

@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 
-class LoginRequist extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -60,11 +60,11 @@ class LoginRequist extends FormRequest
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throtalkey());
- 
+
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throtalkey());
- 
+
         throw ValidationException::withMessages([
             'email' => trans('auth.throttle', [
                 'seconds' => $seconds,

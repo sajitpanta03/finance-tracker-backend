@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequist;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Trait\SanctumToken;
 use Illuminate\Http\Request;
@@ -16,10 +16,11 @@ class loginController extends Controller
     public function index():void{
 
     }
-    public function login(LoginRequist $request){
+    public function login(LoginRequest $request){
 
         $user =  $request->authenticate();
-        return [ "token" => $this->GenerateToken($user ,$request->bollen('remember'))];
+        $remember = "true";
+        return [ "token" => $this->GenerateToken($user, $remember)];
 
     }
 
