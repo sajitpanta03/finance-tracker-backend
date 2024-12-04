@@ -19,8 +19,7 @@ class loginController extends Controller
     public function login(LoginRequist $request){
 
         $user =  $request->authenticate();
-
-        return [ "token" => $this->GenerateToken($user)];
+        return [ "token" => $this->GenerateToken($user ,$request->bollen('remember'))];
 
     }
 

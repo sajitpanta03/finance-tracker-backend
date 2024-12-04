@@ -41,7 +41,7 @@ class LoginRequist extends FormRequest
 
         $credentials = $this->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials , $this->boolean('remember'))) {
             RateLimiter::clear($this->throtalkey());
             return Auth::user();
         }

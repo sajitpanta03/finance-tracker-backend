@@ -13,9 +13,10 @@ trait SanctumToken
      * 
      * @return string token
      */
-    public function GenerateToken(User $user):string
+    public function GenerateToken(User $user, bool $remember):string
     {
-
-        return $user->createToken('login')->plainTextToken;
+        $experation = $remember ? null : now()->addHours(2);
+        return $user->createToken('login',[],$experation)->plainTextToken;
+        // $remember ? now()->addMonth() : now()->addHours(2)
     }
 }

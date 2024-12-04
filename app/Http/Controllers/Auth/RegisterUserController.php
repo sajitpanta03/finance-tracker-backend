@@ -30,7 +30,7 @@ class RegisterUserController extends Controller
             ]);
 
             $token = $this->GenerateToken($user);
-
+            
 
             DB::commit();
             
