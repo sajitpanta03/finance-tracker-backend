@@ -10,6 +10,8 @@ trait SanctumToken
      * to generate sanctum using trait
      * 
      * @parems \App\Models\User $user
+     * @parems string $name
+     * @parems bool $remember
      * 
      * @return string token
      */

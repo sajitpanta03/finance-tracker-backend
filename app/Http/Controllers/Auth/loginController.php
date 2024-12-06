@@ -13,19 +13,29 @@ class loginController extends Controller
 {
     use SanctumToken;
 
-    public function index():void{
-
-    }
-    public function login(LoginRequest $request){
+    public function index(): void {}
+    public function login(LoginRequest $request)
+    {
 
         $user =  $request->authenticate();
-        $remember = "true";
-        return [ "token" => $this->GenerateToken($user, $remember)];
 
+        $remember = "true";
+        return response()->json([
+            "data" => [
+                'user' => Auth::user(),
+                "token" => $this->GenerateToken($user, $remember)
+            ],
+            "massage" => " login successful"
+        ],200);
     }
 
-    public function logout(){
+    public function logout()
+    {
         auth()->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'message' => 'Successfully logged out'
+            ]
+            ,200
+        );
     }
 }
