@@ -80,11 +80,6 @@ class RegisterUserController extends Controller
 
     public function emailVerification(Request $request)
     {
-        // $request->validate([
-        //     'hash' => 'required|string',
-        //     'token' => 'required|string'
-        // ]);
-
         try {
             $user = User::whereRaw('SHA1(email) = ?', $request->hash)->first();
             if (! $user) {
@@ -172,7 +167,7 @@ class RegisterUserController extends Controller
         // creates url for email verification
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
-            now()->addMinutes(1),
+            now()->addMinutes(2),
             ['token' => $verificationToken, 'hash' => sha1($user->email)]
         );
 
