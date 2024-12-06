@@ -16,7 +16,6 @@ class loginController extends Controller
     public function index(): void {}
     public function login(LoginRequest $request)
     {
-
         $user =  $request->authenticate();
 
         $remember = "true";
@@ -26,16 +25,17 @@ class loginController extends Controller
                 "token" => $this->GenerateToken($user, $remember)
             ],
             "massage" => " login successful"
-        ],200);
+        ], 200);
     }
 
     public function logout()
     {
         auth()->user()->currentAccessToken()->delete();
-        return response()->json([
-            'message' => 'Successfully logged out'
-            ]
-            ,200
+        return response()->json(
+            [
+                'message' => 'Successfully logged out'
+            ],
+            200
         );
     }
 }
