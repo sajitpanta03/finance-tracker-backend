@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Auth\Events\PasswordReset;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
@@ -18,21 +18,33 @@ class ResetPasswordController extends Controller
             'password' => 'required|confirmed|min:8',
         ]);
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->password = Hash::make($password);
-                $user->setRememberToken(Str::random(60));
-                $user->save();
 
-                event(new PasswordReset($user));
-            }
-        );
+        $checkInRestTable = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->first();
 
-        if ($status === Password::PASSWORD_RESET) {
-            return response()->json(['message' => 'Password reset successfully.'], 200);
+        if (!$checkInRestTable) {
+            return response()->json(['message' => 'Invalid email.'], 400);
         }
 
-        return response()->json(['message' => 'Failed to reset password.'], 400);
+        $user = User::where('email', $request->email)->first();
+        $checkToken = Hash::check($request->token, $checkInRestTable->token);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        if ($checkToken) {
+            $user->password = Hash::make($request->password);
+            $user->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        } else {
+            return response()->json(['message' => 'Sorry problem occured.'], 200);
+        }
+
+        return response()->json(['message' => 'Password reset successfully.'], 200);
     }
 }
