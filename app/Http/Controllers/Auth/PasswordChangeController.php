@@ -15,7 +15,6 @@ class PasswordChangeController extends Controller
             'email' => 'required|email',
             'old_password' => 'required|min:8|max:16',
             'new_password' => 'required|min:8|max:16',
-            'confirm_password' => 'required|min:8|max:16|same:new_password',
         ]);
 
         $user = User::where('email', $request->email)->first();

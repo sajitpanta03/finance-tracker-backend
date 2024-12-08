@@ -17,8 +17,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [loginController::class, 'login']);
     Route::post('/register', [RegisterUserController::class, 'store']);
     Route::post('/resend/email-Verification',[RegisterUserController::class, 'resendVerificationEmail']);
-    Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
-    Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('forgot-password');
+    Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name('password-reset');
     Route::post('/password-change', [PasswordChangeController::class, 'passwordChange'])->name('password-change');
     Route::get(
         '/email/verify/{token}/{hash}',

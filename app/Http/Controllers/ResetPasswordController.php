@@ -7,24 +7,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+
+use function Pest\Laravel\json;
 
 class ResetPasswordController extends Controller
 {
     public function reset(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'token' => 'required',
-            'password' => 'required|confirmed|min:8',
-        ]);
-
+        try {
+            $request->validate([
+                'email' => 'required|email|exists',
+                'token' => 'required|exists',
+                'password' => 'required|confirmed|min:8',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        }
 
         $checkInRestTable = DB::table('password_reset_tokens')
             ->where('email', $request->email)
             ->first();
 
         if (!$checkInRestTable) {
-            return response()->json(['message' => 'Invalid email.'], 400);
+            return response()->json(['message' => 'Invalid email or token.'], 400);
         }
 
         $user = User::where('email', $request->email)->first();

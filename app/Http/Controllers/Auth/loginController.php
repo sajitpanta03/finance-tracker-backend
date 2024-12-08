@@ -24,7 +24,7 @@ class loginController extends Controller
                 'user' => Auth::user(),
                 "token" => $this->GenerateToken($user, $remember)
             ],
-            "massage" => " login successful"
+            "message" => " login successful"
         ], 200);
     }
 

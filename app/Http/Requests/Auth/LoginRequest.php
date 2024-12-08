@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Trait\ApiResponseTrait;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+
+    use ApiResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
