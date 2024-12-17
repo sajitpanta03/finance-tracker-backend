@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\EmailVerification;
 use App\Models\User;
+use App\Services\ApiResponseService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,29 +46,25 @@ class RegisterUserController extends Controller
                 'remember' => $request->remember
             ]);
 
-            // function to send mail to user for email verification
             $this->sendVerificationEmail($user);
 
-            //token for the Authentication
-            $authToken = $this->GenerateToken($user, $request->remember);
+            $authToken = $this->GenerateToken($user, $request->has('remember'));
 
             DB::commit();
 
-            return response()->json([
-                "data" => [
-                    "user" => $user,
-                    "token" => $authToken
-                ],
-                "massage" => " Registration successful"
-            ], 200);
+            return ApiResponseService::success([
+                "user" => $user,
+                "token" => $authToken
+            ], "User registration successful", 201);
         } catch (Exception $e) {
 
             DB::rollback();
 
-            return response()->json([
-                'message' => 'An error occurred during the operation.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return ApiResponseService::error(
+                "User registration successful",
+                $e->getMessage(),
+                500
+            );
         }
     }
 
@@ -141,7 +138,7 @@ class RegisterUserController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "massage"=>$e
+                "massage" => $e
             ]);
         }
     }

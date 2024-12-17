@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
+use App\Services\ApiResponseService;
 use App\Trait\SanctumToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,24 +19,23 @@ class loginController extends Controller
     {
         $user =  $request->authenticate();
 
-        $remember = "true";
-        return response()->json([
-            "data" => [
-                'user' => Auth::user(),
-                "token" => $this->GenerateToken($user, $remember)
-            ],
-            "message" => " login successful"
-        ], 200);
+        $remember = $request->has('remember');
+        $authToken = $this->GenerateToken($user, $remember);
+
+        return ApiResponseService::success([
+            "user" => $user,
+            "token" => $authToken
+        ], "User login successful", 200);
     }
 
     public function logout()
     {
         auth()->user()->currentAccessToken()->delete();
-        return response()->json(
-            [
-                'message' => 'Successfully logged out'
-            ],
-            200
+
+        return ApiResponseService::success(
+            [],
+            "logout successful",
+            204
         );
     }
 }
