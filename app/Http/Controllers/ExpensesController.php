@@ -7,25 +7,23 @@ use App\Models\Expense;
 use App\Models\Expense_category;
 use App\Services\ApiResponseService;
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class ExpensesController extends Controller
 {
-    
+
     public function index()
     {
         try{
             $query = Expense::query()->with(['expense_categories', 'budgets']);
-    
+
             if(request()->has('search')){
                 $query->where('date_spend', 'LIKE', '%'.request('search').'%')
                 ->orWhere('description', 'LIKE', '%'.request('search').'%');
             }
-    
+
             $expenses= $query->where('user_id', Auth::id() ? Auth::id() : throw new Exception('user is not authentic'))->latest()->paginate(10);
 
         } catch (Exception $e){
@@ -34,7 +32,6 @@ class ExpensesController extends Controller
 
         return ApiResponseService::success($expenses, 'expenses retrived successfully', 200);
     }
-
 
     public function store(Request $request): JsonResponse
     {
@@ -55,9 +52,9 @@ class ExpensesController extends Controller
         }
 
         return  ApiResponseService::success(null,'Expense added successfully', 201);
-    }
+}
 
-    
+
     public function show(Expense $expense)
     {
         $expense->load(['expense_categories', 'budgets']);
@@ -79,7 +76,7 @@ class ExpensesController extends Controller
         return ApiResponseService::success($responseData, 'edit your data', 200);
     }
 
-    
+
     public function update(Request $request, Expense $expense)
     {
         try{
@@ -97,7 +94,7 @@ class ExpensesController extends Controller
             return ApiResponseService::error('error', $e->getMessage());
         }
 
-        
+
         return ApiResponseService::success(null, 'data updated successfully', 200);
     }
 

@@ -58,7 +58,7 @@ class RegisterUserController extends Controller
                     "user" => $user,
                     "token" => $authToken
                 ],
-                "massage" => " Registration successful"
+                "message" => " Registration successful"
             ], 200);
         } catch (Exception $e) {
 

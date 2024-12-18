@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-use function Pest\Laravel\json;
-
 class ResetPasswordController extends Controller
 {
     public function reset(Request $request)
