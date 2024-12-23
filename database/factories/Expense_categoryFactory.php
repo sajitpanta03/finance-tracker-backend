@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class Expense_categoryFactory extends Factory
 {
-    
+
     /**
      * Define the model's default state.
      *

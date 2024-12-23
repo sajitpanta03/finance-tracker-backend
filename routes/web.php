@@ -9,10 +9,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test-email', [ForgotPasswordController::class, 'sendTestEmail']);
-
-
-Route::get(
-        '/email/verify/{token}/{hash}',
-        [RegisterUserController::class, 'emailVerification']
-    )->middleware(['signed'])->name('verification.verify');

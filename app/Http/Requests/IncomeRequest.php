@@ -25,8 +25,7 @@ class IncomeRequest extends FormRequest
             "amount" => "required|numeric",
             "date_received" => "required|date",
             "description" => "required",
-            "user_id" => "required|integer|exists:users,id",
-            "income_source_id" => "required|integer|exists:income_source,id",
+            "income_sources_id" => "required|integer|exists:income_sources,id",
         ];
     }
 }

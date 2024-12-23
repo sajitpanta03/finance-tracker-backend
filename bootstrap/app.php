@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -31,6 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
             } elseif ($exception instanceof ValidationException) {
                 $status = $exception->getStatusCode();
                 $errorMessage = 'Validation Exception';
+            } elseif ($exception instanceof AuthorizationException) {
+                $status = 403;
+                $errorMessage = 'Unauthorized';
             }
 
             $message = $exception->getMessage() ?: $errorMessage;

@@ -137,11 +137,11 @@ class RegisterUserController extends Controller
             // send verification email to user
             $this->sendVerificationEmail($user);
             return response()->json([
-                "massage" => "Verification email sent successful"
+                "message" => "Verification email sent successful"
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "massage"=>$e
+                "message"=>$e
             ]);
         }
     }

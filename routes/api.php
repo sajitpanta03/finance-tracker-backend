@@ -7,12 +7,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\IncomeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return request()->all();
-});
 
 
 Route::prefix('v1')->group(function () {
@@ -37,9 +32,10 @@ Route::prefix('v1')->group(function () {
     )->middleware(['signed'])->name('verification.verify');
 
     Route::middleware('auth:sanctum')->group(function () {
+        // Income
+        Route::get('/search-income', [IncomeController::class, 'searchIncome'])->name('search-income');
+        Route::apiResource('incomes', IncomeController::class);
+
         Route::get('/logout', [loginController::class, 'logout']);
     });
-
-    // Income
-    Route::get('/income', [IncomeController::class, 'index']);
 });

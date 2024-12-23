@@ -94,7 +94,6 @@ class ExpensesController extends Controller
             return ApiResponseService::error('error', $e->getMessage());
         }
 
-
         return ApiResponseService::success(null, 'data updated successfully', 200);
     }
 
